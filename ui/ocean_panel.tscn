@@ -1,0 +1,145 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://ui/ocean_panel.gd" id="1_panel"]
+
+[node name="OceanPanel" type="PanelContainer"]
+anchors_preset = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 120.0
+offset_bottom = 120.0
+mouse_filter = 0
+script = ExtResource("1_panel")
+
+[node name="Margin" type="MarginContainer" parent="."]
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+theme_override_constants/separation = 6
+
+[node name="Header" type="Label" parent="Margin/VBox"]
+theme_override_colors/font_color = Color(0.945, 0.945, 0.945, 1)
+theme_override_font_sizes/font_size = 22
+text = "OceanWaves"
+
+[node name="FpsLabel" type="Label" parent="Margin/VBox"]
+unique_name_in_owner = true
+text = "FPS: --"
+
+[node name="SeaSprayRow" type="HBoxContainer" parent="Margin/VBox"]
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Margin/VBox/SeaSprayRow"]
+custom_minimum_size = Vector2(175, 0)
+text = "Enable Sea Spray:"
+tooltip_text = "Toggles the sea spray particles."
+
+[node name="SprayCheckbox" type="CheckBox" parent="Margin/VBox/SeaSprayRow"]
+unique_name_in_owner = true
+size_flags_horizontal = 3
+
+[node name="ResolutionRow" type="HBoxContainer" parent="Margin/VBox"]
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Margin/VBox/ResolutionRow"]
+custom_minimum_size = Vector2(175, 0)
+text = "Wave Resolution:"
+tooltip_text = "The resolution of the displacement/normal maps used for each wave cascade.\nThis is also the FFT input size."
+
+[node name="ResolutionOption" type="OptionButton" parent="Margin/VBox/ResolutionRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+
+[node name="QualityRow" type="HBoxContainer" parent="Margin/VBox"]
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Margin/VBox/QualityRow"]
+custom_minimum_size = Vector2(175, 0)
+text = "Wave Mesh Quality:"
+
+[node name="QualityOption" type="OptionButton" parent="Margin/VBox/QualityRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+
+[node name="UpdatesRow" type="HBoxContainer" parent="Margin/VBox"]
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Margin/VBox/UpdatesRow"]
+custom_minimum_size = Vector2(175, 0)
+text = "Updates per Second:"
+tooltip_text = "Denotes how many times wave spectrums will be updated per second.\n(0 is uncapped)"
+
+[node name="UpdatesSlider" type="HSlider" parent="Margin/VBox/UpdatesRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+max_value = 60.0
+step = 1.0
+
+[node name="UpdatesValue" type="Label" parent="Margin/VBox/UpdatesRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 0)
+text = "50"
+
+[node name="WaterColorRow" type="HBoxContainer" parent="Margin/VBox"]
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Margin/VBox/WaterColorRow"]
+custom_minimum_size = Vector2(175, 0)
+text = "Water Color:"
+
+[node name="WaterColorButton" type="ColorPickerButton" parent="Margin/VBox/WaterColorRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 24)
+
+[node name="FoamColorRow" type="HBoxContainer" parent="Margin/VBox"]
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Margin/VBox/FoamColorRow"]
+custom_minimum_size = Vector2(175, 0)
+text = "Foam Color:"
+
+[node name="FoamColorButton" type="ColorPickerButton" parent="Margin/VBox/FoamColorRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 24)
+
+[node name="CascadeTabs" type="TabContainer" parent="Margin/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 320)
+
+[node name="CameraHeader" type="Label" parent="Margin/VBox"]
+theme_override_colors/font_color = Color(0.945, 0.945, 0.945, 1)
+theme_override_font_sizes/font_size = 18
+text = "Camera"
+
+[node name="CameraLabel" type="Label" parent="Margin/VBox"]
+unique_name_in_owner = true
+text = "Camera Position: --"
+
+[node name="FovRow" type="HBoxContainer" parent="Margin/VBox"]
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Margin/VBox/FovRow"]
+custom_minimum_size = Vector2(175, 0)
+text = "Camera FOV:"
+
+[node name="FovSlider" type="HSlider" parent="Margin/VBox/FovRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+min_value = 20.0
+max_value = 170.0
+step = 1.0
+value = 75.0
+
+[node name="FovValue" type="Label" parent="Margin/VBox/FovRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 0)
+text = "75"
+
+[node name="FooterLabel" type="Label" parent="Margin/VBox"]
+unique_name_in_owner = true
+theme_override_colors/font_color = Color(0.55, 0.55, 0.55, 1)
+theme_override_font_sizes/font_size = 12
+text = "Press Cmd-H to toggle GUI visibility!"

@@ -12,6 +12,7 @@
 [ext_resource type="Shader" uid="uid://cfkil18smyukv" path="res://assets/shaders/spatial/sea_spray.gdshader" id="8_eu8jb"]
 [ext_resource type="Material" uid="uid://5xqyddws6rt5" path="res://assets/water/mat_spray.tres" id="9_skbf4"]
 [ext_resource type="Texture2D" uid="uid://dtm5tyuh2slqt" path="res://assets/water/sea_spray.png" id="10_spqpo"]
+[ext_resource type="PackedScene" path="res://ui/ocean_panel.tscn" id="11_panel"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_t7jwl"]
 panorama = ExtResource("3_0ksgj")
@@ -138,3 +139,7 @@ autoplay = true
 stream = ExtResource("8_6r5si")
 volume_db = -30.0
 autoplay = true
+
+[node name="UICanvas" type="CanvasLayer" parent="." unique_id=893214466]
+
+[node name="OceanPanel" parent="UICanvas" instance=ExtResource("11_panel")]
