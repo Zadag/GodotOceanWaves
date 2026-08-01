@@ -6,7 +6,7 @@
  */
 
 #define PI           (3.141592653589793)
-#define MAX_MAP_SIZE (1024U)
+#define MAX_MAP_SIZE (512U)
 #define NUM_SPECTRA  (4U)
 
 layout(local_size_x = MAX_MAP_SIZE, local_size_y = 1, local_size_z = 1) in;

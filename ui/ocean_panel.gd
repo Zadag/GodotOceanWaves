@@ -31,7 +31,7 @@ func build_ui() -> void:
 	spray_checkbox.set_pressed_no_signal(water.get_node('WaterSprayEmitter').visible)
 	spray_checkbox.toggled.connect(func(on: bool): water.get_node('WaterSprayEmitter').visible = on)
 
-	var resolutions := [128, 256, 512, 1024]
+	var resolutions := [128, 256, 512]
 	resolution_option.clear()
 	for size in resolutions:
 		resolution_option.add_item('%dx%d' % [size, size], size)

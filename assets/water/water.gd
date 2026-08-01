@@ -35,12 +35,12 @@ enum MeshQuality { LOW, HIGH }
 		_update_scales_uniform()
 
 @export_group('Performance Parameters')
-@export_enum('128x128:128', '256x256:256', '512x512:512', '1024x1024:1024') var map_size := 1024 :
+@export_enum('128x128:128', '256x256:256', '512x512:512') var map_size := 512 :
 	set(value):
 		map_size = value
 		_setup_wave_generator()
 
-@export var mesh_quality := MeshQuality.HIGH :
+@export var mesh_quality := MeshQuality.LOW :
 	set(value):
 		mesh_quality = value
 		mesh = WATER_MESH_HIGH if mesh_quality == MeshQuality.HIGH else WATER_MESH_LOW
@@ -48,7 +48,7 @@ enum MeshQuality { LOW, HIGH }
 ## How many times the wave simulation should update per second.
 ## Note: This doesn't reduce the frame stutter caused by FFT calculation, only
 ##       minimizes GPU time taken by it!
-@export_range(0, 60) var updates_per_second := 50.0 :
+@export_range(0, 60) var updates_per_second := 25.0 :
 	set(value):
 		next_update_time = next_update_time - (1.0/(updates_per_second + 1e-10) - 1.0/(value + 1e-10))
 		updates_per_second = value

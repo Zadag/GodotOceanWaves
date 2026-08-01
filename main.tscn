@@ -35,7 +35,7 @@ fog_sky_affect = 0.0
 fog_depth_curve = 0.25
 fog_depth_begin = 200.0
 fog_depth_end = 350.0
-volumetric_fog_enabled = true
+volumetric_fog_enabled = false
 volumetric_fog_density = 0.0
 volumetric_fog_length = 256.0
 adjustment_enabled = true
@@ -86,12 +86,6 @@ shader_parameter/dissolve_texture = SubResource("NoiseTexture2D_tsx6q")
 
 [sub_resource type="QuadMesh" id="QuadMesh_06d3e"]
 
-[sub_resource type="FogMaterial" id="FogMaterial_riff4"]
-density = 8.0
-albedo = Color(0.988718, 0.989631, 0.989629, 1)
-height_falloff = 0.176
-edge_fade = 1.75
-
 [node name="Main" type="Node3D" unique_id=1491248103]
 script = ExtResource("1_skarq")
 
@@ -119,14 +113,10 @@ parameters = Array[ExtResource("2_pw5n6")]([SubResource("Resource_adqv5"), SubRe
 transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_ds3o1")
 cast_shadow = 0
-amount = 32768
+amount = 8000
 lifetime = 6.0
 process_material = ExtResource("9_skbf4")
 draw_pass_1 = SubResource("QuadMesh_06d3e")
-
-[node name="FogVolume" type="FogVolume" parent="." unique_id=1346534460]
-shape = 4
-material = SubResource("FogMaterial_riff4")
 
 [node name="OceanAudioPlayer" type="AudioStreamPlayer" parent="." unique_id=2001357393]
 stream = ExtResource("6_jpklm")
