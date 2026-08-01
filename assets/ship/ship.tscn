@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3 uid="uid://bdgh8x6o0v1kq"]
+
+[ext_resource type="Script" path="res://assets/ship/ship.gd" id="1_ship"]
+
+[sub_resource type="StandardMaterial3D" id="mat_hull"]
+albedo_color = Color(0.55, 0.16, 0.1, 1)
+
+[sub_resource type="BoxMesh" id="mesh_hull"]
+size = Vector3(6, 2.4, 15)
+
+[sub_resource type="StandardMaterial3D" id="mat_cabin"]
+albedo_color = Color(0.88, 0.84, 0.76, 1)
+
+[sub_resource type="BoxMesh" id="mesh_cabin"]
+size = Vector3(3.6, 2.1, 5.4)
+
+[sub_resource type="BoxShape3D" id="shape_hull"]
+size = Vector3(6, 2.4, 15)
+
+[node name="Ship" type="RigidBody3D"]
+mass = 300.0
+linear_damp = 0.05
+angular_damp = 0.4
+script = ExtResource("1_ship")
+water_surface_sampler = NodePath("../WaterSurfaceSampler")
+
+[node name="Hull" type="MeshInstance3D" parent="."]
+surface_material_override/0 = SubResource("mat_hull")
+mesh = SubResource("mesh_hull")
+position = Vector3(0, -0.75, 0)
+
+[node name="Cabin" type="MeshInstance3D" parent="."]
+surface_material_override/0 = SubResource("mat_cabin")
+mesh = SubResource("mesh_cabin")
+position = Vector3(0, 1.5, -0.9)
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+shape = SubResource("shape_hull")
+position = Vector3(0, -0.75, 0)
+
+[node name="FloaterCenter" type="Marker3D" parent="."]
+position = Vector3(0, -0.9, 0)
+
+[node name="FloaterBow" type="Marker3D" parent="."]
+position = Vector3(0, -0.9, 6.3)
+
+[node name="FloaterStern" type="Marker3D" parent="."]
+position = Vector3(0, -0.9, -6.3)
+
+[node name="FloaterPort" type="Marker3D" parent="."]
+position = Vector3(-2.7, -0.9, 0)
+
+[node name="FloaterStarboard" type="Marker3D" parent="."]
+position = Vector3(2.7, -0.9, 0)

@@ -143,3 +143,7 @@ unique_name_in_owner = true
 theme_override_colors/font_color = Color(0.55, 0.55, 0.55, 1)
 theme_override_font_sizes/font_size = 12
 text = "Press Cmd-H to toggle GUI visibility!"
+
+[node name="QuitButton" type="Button" parent="Margin/VBox"]
+unique_name_in_owner = true
+text = "Quit"

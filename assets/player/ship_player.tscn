@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://cpw1sfk2qvpnp"]
+
+[ext_resource type="Script" path="res://assets/player/ship_player.gd" id="1_player"]
+
+[node name="ShipPlayer" type="Node3D"]
+script = ExtResource("1_player")
+
+[node name="Camera" type="Camera3D" parent="."]
+current = true
+position = Vector3(0, 1.7, 0)

@@ -8,6 +8,7 @@ var previous_tile := Vector3i.MAX
 @onready var camera : Variant = viewport.get_camera_3d()
 @onready var water := $Water
 @onready var ocean_panel := $UICanvas/OceanPanel
+@onready var ship_player := $Ship/ShipPlayer
 
 func _init() -> void:
 	if Engine.is_editor_hint(): return
@@ -32,7 +33,7 @@ func _ready() -> void:
 func _process(delta : float) -> void:
 	if not Engine.is_editor_hint():
 		ocean_panel.update_dynamic()
-		camera.enable_camera_movement = not ocean_panel.is_ui_active()
+		ship_player.enable_camera_movement = not ocean_panel.is_ui_active()
 
 func _physics_process(delta: float) -> void:
 	# Shift water mesh whenever player moves into a new tile.
@@ -49,12 +50,10 @@ func _physics_process(delta: float) -> void:
 	$WindAudioPlayer.volume_db = lerpf(5.0, -30.0, minf(total_wind_speed/15.0, 1.0))
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed(&'toggle_imgui'):
+	if event.is_action_pressed(&'toggle_imgui') or event.is_action_pressed(&'ui_cancel'):
 		ocean_panel.visible = not ocean_panel.visible
 	elif event.is_action_pressed(&'toggle_fullscreen'):
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_WINDOWED else DisplayServer.WINDOW_MODE_WINDOWED)
-	elif event.is_action_pressed(&'ui_cancel'):
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 
 func _on_mesh_quality_changed(index: int) -> void:
 	clipmap_tile_size = 1.0 if index == water.MeshQuality.HIGH else 4.0

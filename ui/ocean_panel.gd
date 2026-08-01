@@ -19,10 +19,12 @@ var camera: Camera3D
 @onready var fov_slider: HSlider = %FovSlider
 @onready var fov_value: Label = %FovValue
 @onready var footer_label: Label = %FooterLabel
+@onready var quit_button: Button = %QuitButton
 
 func _ready() -> void:
 	var modifier := 'Cmd' if OS.get_name() == 'macOS' else 'Ctrl'
-	footer_label.text = 'Press %s-H to toggle GUI visibility!\nPress %s-F to toggle fullscreen!' % [modifier, modifier]
+	footer_label.text = 'Esc: show GUI / free mouse\n%s-H: toggle GUI   %s-F: toggle fullscreen' % [modifier, modifier]
+	quit_button.pressed.connect(func(): get_tree().quit())
 
 ## Wires the UI up to the water and camera. Called by main.gd after the scene is ready.
 func build_ui() -> void:
@@ -145,9 +147,11 @@ func update_dynamic() -> void:
 	camera_label.text = 'Camera Position: %+.2v' % camera.global_position
 
 ## Returns true when the GUI should capture mouse/keyboard input so the
-## free-look camera stays still. Focus only counts for text-editing controls,
-## since Godot keeps focus on sliders/buttons after use.
+## free-look camera stays still. A visible panel counts as active (Esc shows
+## the GUI to free the cursor); otherwise only hover and text-focus count.
 func is_ui_active() -> bool:
+	if visible:
+		return true
 	var viewport := get_viewport()
 	if viewport.gui_get_hovered_control() != null:
 		return true
