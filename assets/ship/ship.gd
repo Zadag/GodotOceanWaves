@@ -18,12 +18,12 @@ extends RigidBody3D
 
 @export var water_surface_sampler : NodePath
 @export var water_density := 1000.0      # kg/m^3.
-@export var waterplane_area := 11.0      # Effective hull waterplane (m^2). With 10 t this gives ~0.9 m draft.
-@export var hull_depth := 2.4            # Column height at which buoyancy saturates (fully submerged hull).
-@export var water_drag := 5.0            # Linear damping (scaled by the floater's weight share).
+@export var waterplane_area := 17.0      # Effective hull waterplane (m^2). With 28 t this gives ~1.65 m draft.
+@export var hull_depth := 5.0            # Column height at which buoyancy saturates (fully submerged hull).
+@export var water_drag := 3.0            # Linear damping (scaled by the floater's weight share).
 @export var angular_drag := 1.2          # Torque damping factor.
-@export var height_smoothing := 0.2      # Seconds of low-pass filtering applied to sampled wave heights.
-@export_range(-3.0, 0.0) var ballast_y := -1.4  # Center of mass height (local), deep in the keel.
+@export var height_smoothing := 0.05     # Seconds of low-pass filtering applied to sampled wave heights.
+@export_range(-3.0, 0.0) var ballast_y := -1.8  # Center of mass height (local), deep in the keel.
 
 var _sampler : Node
 var _floaters : Array[Marker3D] = []
