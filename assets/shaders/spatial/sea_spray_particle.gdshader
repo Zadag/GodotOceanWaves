@@ -27,6 +27,12 @@ global uniform uint num_cascades;
 global uniform sampler2DArray displacements;         // Each layer represents one wave cascade.
 global uniform sampler2DArray normals : hint_normal; // Each layer represents one wave cascade.
 
+group_uniforms ship_occlusion;
+uniform mat4 occluder_transform_inverse = mat4(1.0);   // World -> ship-local. Updated per-frame by ship.gd.
+uniform sampler2D occluder_sdf : filter_linear;        // Baked top-down hull outline: 0.5 = hull side, <0.5 inside.
+uniform vec4 occluder_uv_rect = vec4(0, 0, 0, 0);      // xy: silhouette min XZ (ship-local). zw: 1/span XZ.
+uniform float occluder_sdf_range = 2.0;                // Metres encoded between texel values 0.5 and 0.0/1.0.
+
 // Source: https://www.shadertoy.com/view/Xt3cDn
 vec3 hash32(uvec2 p) {
 	p = 1103515245U * ((p >> 1U) ^ p.yx);
@@ -87,6 +93,16 @@ void process() {
 			float foam_factor = mix(0.25, 1.0, min((foam - 0.9) / (1.0 - 0.9), 1.0));          // [0.90..1.00] -> [0.25..1]
 
 			ACTIVE = normal_factor >= 0.0 && normal_factor <= 1.0 && foam > 0.9;
+			// Cull ALL ambient spray inside the hull silhouette (any height): crest-riding
+			// billboards otherwise blanket the boat and read as a water sheet over the deck.
+			// Spray during real overtopping comes from the dedicated HullSplashEmitter instead.
+			// Strictly bounded to the silhouette's bounding box, like the water mask.
+			vec3 occluder_local = (occluder_transform_inverse * vec4(START_POS, 1.0)).xyz;
+			vec2 occ_uv = occluder_local.xz*occluder_uv_rect.zw + occluder_uv_rect.xy;
+			bool occ_in_bbox = all(greaterThan(occ_uv, vec2(0.001))) && all(lessThan(occ_uv, vec2(0.999)));
+			float occluder_sdf_m = (texture(occluder_sdf, occ_uv).r - 0.5)*2.0*occluder_sdf_range;
+			bool occluded = occ_in_bbox && occluder_sdf_m < 0.5;
+			ACTIVE = ACTIVE && !occluded;
 			SCALE_FACTOR = normal_factor*foam_factor;
 			// Size of particle is based on foam amount and is flattened based on normal height.
 			PARTICLE_SCALE = vec3(foam_factor * (float(ACTIVE) + 1e-3));

@@ -20,6 +20,10 @@ config/features=PackedStringArray("4.7", "Forward Plus")
 boot_splash/show_image=false
 config/icon="res://icon.svg"
 
+[autoload]
+
+ScreenshotHotkey="*res://tools/screenshot_hotkey.gd"
+
 [debug]
 
 gdscript/warnings/unused_parameter=0
