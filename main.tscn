@@ -14,7 +14,7 @@
 [ext_resource type="PackedScene" path="res://ui/ocean_panel.tscn" id="11_panel"]
 [ext_resource type="Script" uid="uid://wmnc804rnxqj" path="res://assets/water/water_surface_sampler.gd" id="12_sampler"]
 [ext_resource type="PackedScene" uid="uid://bdgh8x6o0v1kq" path="res://assets/ship/ship.tscn" id="13_ship"]
-[ext_resource type="PackedScene" path="res://assets/player/ship_player.tscn" id="14_player"]
+[ext_resource type="PackedScene" uid="uid://cpw1sfk2qvpnp" path="res://assets/player/ship_player.tscn" id="14_player"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_t7jwl"]
 panorama = ExtResource("3_0ksgj")
@@ -100,7 +100,7 @@ shadow_opacity = 0.8
 shadow_blur = 5.0
 
 [node name="Water" type="MeshInstance3D" parent="." unique_id=1071658796]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 27)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 18)
 sorting_offset = 999.0
 material_override = ExtResource("5_lt75t")
 cast_shadow = 0
@@ -139,8 +139,7 @@ water_path = NodePath("../Water")
 
 [node name="Ship" parent="." unique_id=1322217919 instance=ExtResource("13_ship")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 8)
-mass = 10000.0
+mass = 33000.0
 
 [node name="ShipPlayer" parent="Ship" unique_id=335410182 instance=ExtResource("14_player")]
-position = Vector3(0, 0.45, 5.5)
-rotation = Vector3(0, 3.14159, 0)
+transform = Transform3D(-1, 0, 2.5351817e-06, 0, 1, 0, -2.5351817e-06, 0, -1, 0, 1.4, 5.5)

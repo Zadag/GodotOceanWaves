@@ -35,12 +35,18 @@ void main() {
 	uint idx = gl_GlobalInvocationID.x;
 	if (idx >= ub.sample_count) { return; }
 
-	vec2 local_xz = positions.positions[idx].xy - ub.water_origin;
-	float height = 0.0;
-	for (uint i = 0U; i < ub.num_cascades; ++i) {
-		vec4 scales = ub.map_scales[i];
-		vec3 d = texture(sampler2DArray(displacement_texture, displacement_sampler), vec3(local_xz * scales.xy, float(i))).xyz;
-		height += d.y * scales.z;
+	// The ocean shader samples WORLD coordinates. Invert horizontal choppiness
+	// so the query measures the crest at the requested position, not its source.
+	vec2 target = positions.positions[idx].xy;
+	vec2 source = target;
+	vec3 displacement = vec3(0.0);
+	for (int iteration = 0; iteration < 4; ++iteration) {
+		displacement = vec3(0.0);
+		for (uint i = 0U; i < ub.num_cascades; ++i) {
+			vec4 scales = ub.map_scales[i];
+			displacement += texture(sampler2DArray(displacement_texture, displacement_sampler), vec3(source * scales.xy, float(i))).xyz * scales.z;
+		}
+		source = mix(source, target - displacement.xz, 0.75);
 	}
-	results.results[idx] = vec4(0.0, 0.0, 0.0, height);
+	results.results[idx] = vec4(0.0, 0.0, 0.0, displacement.y);
 }

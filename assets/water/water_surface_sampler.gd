@@ -4,7 +4,7 @@ extends Node
 ## Dispatches a tiny compute shader (water_surface.glsl) against the wave
 ## displacement maps produced by the water's WaveGenerator and reads the results
 ## back to the CPU. The shader mirrors the exact displacement accumulation in
-## water.gdshader so other nodes (e.g. the demo ship) can query accurate wave
+## water.gdshader so other nodes can query accurate wave
 ## heights at arbitrary world positions for buoyancy.
 ##
 ## Usage:

@@ -20,9 +20,19 @@ global uniform uint num_cascades;
 global uniform sampler2DArray displacements;         // Each layer represents one wave cascade.
 global uniform sampler2DArray normals : hint_normal; // Each layer represents one wave cascade.
 
+group_uniforms ship_interaction;
+uniform mat4 ship_transform_inverse = mat4(1.0);     // World -> ship-local. Updated per-frame by ship.gd.
+uniform sampler2D hull_sdf : filter_linear;          // Baked top-down hull outline: 0.5 = hull side, >0.5 outside, <0.5 inside.
+uniform vec4 hull_uv_rect = vec4(-2.6251, -8.2, 0.19248, 0.060976); // xy: silhouette min XZ (ship-local). zw: 1/span XZ.
+uniform float sdf_range = 2.0;                       // Metres encoded between texel values 0.5 and 0.0/1.0.
+uniform float deck_height_local = 1.45;              // Local Y where offshore waves hand over to the deck wash simulation.
+uniform vec4 hull_foam = vec4(0.0, 1.1, 1.0, 0.0);   // x: deck plane world Y (per-frame from ship.gd). y: foam band width. z: strength. w: interaction enabled.
+uniform bool mask_debug = false;                     // When true, water that would be discarded renders MAGENTA instead (F7).
+
 varying float wave_height;
 varying float foam_factor;
 varying float fresnel;
+varying vec3 world_position;
 
 void vertex() {
 	UV = VERTEX.xz;
@@ -36,6 +46,7 @@ void vertex() {
 	}
 	VERTEX += displacement * distance_factor;
 	wave_height = displacement.y;
+	world_position = VERTEX;
 }
 
 /** Filter weights for a cubic B-spline. */
@@ -84,7 +95,29 @@ void fragment() {
 	}
 		
 	foam_factor = smoothstep(0.0, 1.0, gradient.z*0.75) * exp(-dist*0.0075);
+
+	// The offshore surface hands over to the retained deck wash just inside the
+	// rail. A narrow overlap hides the join without letting ocean waves cut through the cabin.
+	vec3 ship_local = (ship_transform_inverse * vec4(world_position, 1.0)).xyz;
+	vec2 sdf_uv = (ship_local.xz - hull_uv_rect.xy) * hull_uv_rect.zw; // Local XZ -> silhouette UV.
+	// The mask is strictly bounded to the silhouette's bounding box: fragments outside it
+	// can never be discarded or foamed, regardless of texture filtering state.
+	bool in_bbox = all(greaterThan(sdf_uv, vec2(0.001))) && all(lessThan(sdf_uv, vec2(0.999)));
+	// textureLod 0: never select a mip level (averaged mips would blur the outline to ~0.5).
+	float hull_sdf_m = (textureLod(hull_sdf, sdf_uv, 0.0).r - 0.5)*2.0*sdf_range;
+	bool masked = hull_foam.w > 0.5 && in_bbox && hull_sdf_m < -0.10 && ship_local.y > deck_height_local;
+	if (masked && !mask_debug) { discard; }
+
+	// Foam blooms along the hull outline only while a crest is actually overtopping the deck.
+	float overtopping = smoothstep(0.0, 0.45, ship_local.y - deck_height_local);
+	float ring = (1.0 - smoothstep(hull_foam.y*0.2, hull_foam.y, hull_sdf_m))*float(in_bbox);
+	foam_factor = max(foam_factor, ring*overtopping*hull_foam.z*hull_foam.w);
+
 	ALBEDO = mix(water_color.rgb, foam_color.rgb, foam_factor);
+	if (masked && mask_debug) {
+		ALBEDO = vec3(1.0, 0.05, 1.0); // Debug: visualize the masked region.
+		ROUGHNESS = 0.9;
+	}
 
 	gradient *= mix(0.015, normal_strength, exp(-dist*0.0175)); // Blend normal with terrain normal as distance increases.
 	NORMAL = (VIEW_MATRIX * vec4(normalize(vec3(-gradient.x, 1.0, -gradient.y)), 0.0)).xyz;

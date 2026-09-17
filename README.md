@@ -12,6 +12,13 @@ A benefit of working in frequency space using ocean-wave spectra is the ease of 
 To compute the Fourier transform, a *fast Fourier transform* algorithm (FFT) is used specifically. On top of having a lower computational complexity than the classical discrete Fourier transform algorithm ($O(N \log N)$ versus $`O(N^2)`$), the FFT is *scalable as a parallel system*. This means that it is perfect for running on the GPU. Using Gerstner waves requires each thread to perform $N$ computations, one for each wave. In contrast, FFT-based waves only require each thread to perform $\log(N)$ equivalent computations. At scale, more waves can be added to the system (at the same performance cost), permitting more accurate surface simulation.
 
 ## Results
+### Water on the deck
+Waves overtopping the ship feed a local shallow-water simulation through 20 probes around the hull. Higher crests supply more water and drive faster, farther-reaching wash. The surface flows around the cabin, responds to the ship's pitch and roll, drains over the sides, and leaves foam and a fading wet sheen. The offshore ocean hands over to this surface just inside the hull outline.
+
+Select `Ship/DeckWash` in `assets/ship/ship.tscn` to adjust `spill_strength`, `drainage`, `drying_time`, or the cabin footprint. `Ship.deck_height` sets the entry height; `Ship.get_deck_water_depth(local_xz)` returns retained water depth for gameplay. The wash is a shallow-water visual approximation; it does not add floodwater mass to the ship's buoyancy model. The grid and cabin footprint are fitted to the included ship.
+
+Run the simulation checks with `godot --headless --path . --script tools/test_deck_wash.gd`. Rendering the full ocean requires a GPU and the Forward+ renderer.
+
 ### Wave Shading
 #### Lighting Model
 The ocean lighting model largely follows the BSDF described in the 'Atlas' GDC talk. One deviation, however, is the use of the GGX distribution (rather than Beckmann distribution) for the microfacet distribution. This was due to the GGX distribution's 'flatter' and softer highlights providing a more uniform appearance in many of the ocean-wave environments tested.

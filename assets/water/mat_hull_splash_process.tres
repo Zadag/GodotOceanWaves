@@ -1,0 +1,19 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=4]
+
+[ext_resource type="Shader" path="res://assets/shaders/spatial/hull_splash_particle.gdshader" id="1_process"]
+[ext_resource type="Texture2D" path="res://assets/water/hull_sdf.png" id="2_hullsdf"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_process")
+shader_parameter/num_particles = 8192
+shader_parameter/lifetime = 1.6
+shader_parameter/lifetime_randomness = 0.5
+shader_parameter/particle_scale = Vector3(0.9, 0.8, 0.9)
+shader_parameter/submersion_gain = 1.5
+shader_parameter/crash_intensity = 0.0
+shader_parameter/deck_ring_ratio = 0.35
+shader_parameter/hull_sdf = ExtResource("2_hullsdf")
+shader_parameter/hull_uv_rect = Vector4(-2.6251, -8.2, 0.19248, 0.060976)
+shader_parameter/sdf_range = 2.0
+shader_parameter/ring_heights = Vector4(0.15, 1.45, 0.45, 0)

@@ -6,10 +6,10 @@ extends Node3D
 
 @export_range(0.1, 10.0) var move_speed := 4.0
 @export_range(0.1, 10.0) var mouse_sensitivity := 3.0
-@export var walk_bounds := Vector2(2.9, 7.3)   # Max deck offsets in ship-local XZ.
+@export var walk_bounds := Vector2(2.2, 7.8)   # Max deck offsets in ship-local XZ.
 
-const CABIN_CENTER := Vector2(0.0, -0.9)   # Cabin footprint in ship-local XZ.
-const CABIN_HALF := Vector2(1.8, 2.7)
+const CABIN_CENTER := Vector2(0.0, -0.6)   # Cabin footprint in ship-local XZ.
+const CABIN_HALF := Vector2(1.2, 3.1)
 const OBSTACLE_MARGIN := 0.3
 
 var enable_camera_movement := true:

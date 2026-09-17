@@ -1,0 +1,18 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bpbsaiof724jr"]
+
+[ext_resource type="Shader" uid="uid://nds532x18vxn" path="res://assets/shaders/spatial/hull_splash_mesh.gdshader" id="1_mesh"]
+[ext_resource type="Texture2D" uid="uid://dtm5tyuh2slqt" path="res://assets/water/sea_spray.png" id="2_albedo"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_splash"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_splash"]
+noise = SubResource("FastNoiseLite_splash")
+seamless = true
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_mesh")
+shader_parameter/max_alpha = 0.78
+shader_parameter/fade_distance = 80.0
+shader_parameter/albedo_texture = ExtResource("2_albedo")
+shader_parameter/dissolve_texture = SubResource("NoiseTexture2D_splash")
